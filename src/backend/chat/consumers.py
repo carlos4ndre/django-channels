@@ -42,6 +42,6 @@ def ws_disconnect(message):
 
 def _parse_limit(params):
     try:
-        return params.get('limit')[0]
+        return int(params.get('limit')[0])
     except:
         return MAX_MESSAGES_LIMIT

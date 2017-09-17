@@ -30,3 +30,25 @@ def test_http_messages():
 
     last_message = messages[-1]
     assert last_message["text"] == "Message #{}".format(MESSAGE_BATCH_SIZE)
+
+
+@pytest.mark.django_db
+def test_http_messages_with_limit():
+    # populate db with messages
+    HTTP_PARAMS_LIMIT = 2
+    MESSAGE_BATCH_SIZE = 5
+    MessageFactory.create_batch(size=MESSAGE_BATCH_SIZE)
+
+    # fetch messages
+    client = HttpClient()
+    client.send_and_consume("http.request", content={
+        "path": "/messages",
+        "method": "GET",
+        "query_string": "limit={}".format(HTTP_PARAMS_LIMIT),
+    })
+    response = client.receive()
+    content = json.loads(response["content"])
+    messages = content["messages"]
+
+    # check response
+    assert len(messages) == HTTP_PARAMS_LIMIT
