@@ -1,17 +1,45 @@
 import React, { Component } from 'react';
 import { Input, List } from 'semantic-ui-react'
+import emoji from 'react-easy-emoji'
+import axios from 'axios';
 
 export default class App extends Component {
 
+  constructor() {
+    super();
+    this.state = {
+      messages: [],
+    };
+  }
+
+  componentDidMount() {
+      axios.get("http://localhost:8000/messages")
+      .then(response => {
+        console.debug(response)
+        this.setState({
+          messages: response.data.messages,
+        })
+      })
+      .catch((error) => {
+        console.info("error",error)
+      })
+  }
+
   render() {
+    let messages;
+    if (this.state.messages.length < 0) {
+      messages = this.state.messages.map((message, i) =>
+              <List.Item key={i}>[{message.timestamp}] {message.text}</List.Item>)
+    }
+    else {
+      messages = <List.Item><h3>{emoji('No messages yet... 😀')}</h3></List.Item>
+    }
+
     return (
       <div className="message-box">
         <div className="message-board">
           <List>
-            <List.Item>[15/09/2018 20:00] A + B = C</List.Item>
-            <List.Item>[15/09/2018 20:40] Hello!</List.Item>
-            <List.Item>[15/09/2018 22:10] 123456789</List.Item>
-            <List.Item>[15/09/2018 23:30] Random()</List.Item>
+            { messages }
           </List>
         </div>
         <div className="message-sender">

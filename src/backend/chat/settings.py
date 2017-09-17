@@ -18,6 +18,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
+    'corsheaders',
     'channels',
     'chat',
 ]
@@ -30,6 +32,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 TEMPLATES = [
@@ -120,3 +124,6 @@ LOGGING = {
         },
     },
 }
+
+# CORS
+MIDDLEWARE.append('chat.middleware.custom_cors_middleware')

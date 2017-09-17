@@ -6,6 +6,7 @@ from channels.handler import AsgiHandler
 from urllib.parse import parse_qs
 from chat.models import Message
 from chat.contants import MAX_MESSAGES_LIMIT
+from chat.middleware import _add_cors_to_response
 
 logger = logging.getLogger(__name__)
 
@@ -25,9 +26,13 @@ def http_messages(message):
     limit = _parse_limit(params)
     messages = reversed(Message.objects.order_by("-timestamp")[:limit])
 
-    # return data in json format
+    # generate data in json format
     data = {"messages": list(map(Message.as_dict, messages))}
     response = JsonResponse(data)
+
+    # HACK: add cors headers
+    response = _add_cors_to_response(response)
+
     for chunk in AsgiHandler.encode_response(response):
         message.reply_channel.send(chunk)
 
