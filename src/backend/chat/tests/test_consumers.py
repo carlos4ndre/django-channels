@@ -1,7 +1,7 @@
 import json
 import pytest
+from channels.test import WSClient, HttpClient
 from chat.factory import MessageFactory
-from channels.test import HttpClient
 
 
 @pytest.mark.django_db
@@ -52,3 +52,34 @@ def test_http_messages_with_limit():
 
     # check response
     assert len(messages) == HTTP_PARAMS_LIMIT
+
+@pytest.mark.django_db
+def test_ws_connect():
+    # connect to chat group
+    client = WSClient()
+    client.send_and_consume("websocket.connect", path="/chat")
+
+    # check there is no errors
+    assert client.receive(json=False) == None
+
+@pytest.mark.django_db
+def test_ws_disconnect():
+    # disconnect from chat group
+    client = WSClient()
+    client.send_and_consume("websocket.connect", path="/chat")
+    client.send_and_consume("websocket.disconnect", path="/chat")
+
+    # check there is no errors
+    assert client.receive(json=False) == None
+
+@pytest.mark.django_db
+def test_ws_receive():
+    # send message
+    text = "this is a text"
+    client = WSClient()
+    client.send_and_consume("websocket.connect", path="/chat")
+    client.send_and_consume("websocket.receive", path="/chat", text=text)
+
+    # consume message and check content
+    response = client.receive(json=True)
+    assert response["text"] == text
