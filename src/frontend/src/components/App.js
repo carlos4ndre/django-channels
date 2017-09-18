@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import ReconnectingWebSocket from "reconnecting-websocket";
 import { Input } from "semantic-ui-react"
 import axios from "axios";
+import ReconnectingWebSocket from "reconnecting-websocket";
 import MessageList from "./MessageList"
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 
 export default class App extends Component {
@@ -34,14 +35,18 @@ export default class App extends Component {
 
   onSocketClose() {
     console.log("Connection terminated")
+    this.createNotification("warning", "Connection closed")
   }
 
   onSocketOpen() {
     console.log("Connection established")
+    this.createNotification("success", "Connection Established")
   }
 
   onSocketMessage(message) {
     console.debug("Received message:",  message)
+    this.createNotification("success", "Received message")
+
     let new_message = JSON.parse(message.data)
     this.setState({
       messages: [...this.state.messages, new_message]
@@ -50,6 +55,7 @@ export default class App extends Component {
 
   onSocketError(error) {
     console.log(error)
+    this.createNotification("error", "Something is broken!")
   }
 
   sendMessage(text) {
@@ -68,12 +74,34 @@ export default class App extends Component {
     }
   }
 
+  createNotification = (type, message) => {
+      switch (type) {
+        case 'info':
+          NotificationManager.info(message, 'Info');
+          break;
+        case 'success':
+          NotificationManager.success(message, 'Success');
+          break;
+        case 'warning':
+          NotificationManager.warning(message, 'Warning', 3000);
+          break;
+        case 'error':
+          NotificationManager.error(message, 'Error', 5000, () => {
+            alert('callback');
+          });
+          break;
+        default:
+          return
+      }
+  };
+
   render() {
     return (
       <div className="message-box">
         <div className="message-board">
           <MessageList messages={this.state.messages}/>
         </div>
+        <NotificationContainer />
         <div className="message-sender">
           <Input
             fluid
