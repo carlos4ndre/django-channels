@@ -97,12 +97,12 @@ export default class App extends Component {
 
   render() {
     return (
-      <div className="message-box">
-        <div className="message-board">
+      <div id="message-box">
+        <div id="message-board">
           <MessageList messages={this.state.messages}/>
         </div>
         <NotificationContainer />
-        <div className="message-sender">
+        <div id="message-sender">
           <Input
             fluid
             size="large"
