@@ -1,0 +1,23 @@
+language: python
+
+python:
+  - "3.6"
+
+services:
+  - redis-server
+
+env:
+  global:
+    - PIP_USE_MIRRORS=true
+
+install:
+  - cd src/backend
+  - pip install -q -r requirements.txt
+
+before_script:
+  - cd src/backend
+  - python manage.py makemigrations
+  - python manage.py migrate
+
+script:
+  - pytest
