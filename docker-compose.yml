@@ -1,0 +1,25 @@
+version: '2'
+services:
+    redis:
+        image: redis
+    backend:
+        build: ./src/backend
+        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - ./src/backend:/code
+        ports:
+            - "8000:8000"
+        environment:
+          - REDIS_HOST=redis
+        depends_on:
+            - redis
+    frontend:
+        build: ./src/frontend
+        command: yarn start
+        volumes:
+            - ./src/frontend:/code
+            - /frontend/node_modules
+        ports:
+            - "3000:3000"
+        depends_on:
+          - backend
