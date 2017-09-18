@@ -14,8 +14,8 @@ def _add_cors_to_response(response):
     localhost:3000, to access the API, which is served on localhost:8000.
     """
     if settings.DEBUG:
-        response['Access-Control-Allow-Origin'] = 'http://localhost:3000'
-        response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, PATCH, OPTIONS, DELETE, HEAD'
-        response['Access-Control-Allow-Headers'] = 'Content-Type, X-CSRFToken'
-        response['Access-Control-Allow-Credentials'] = 'true'
+        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        response["Access-Control-Allow-Methods"] = "GET, POST, PUT, PATCH, OPTIONS, DELETE, HEAD"
+        response["Access-Control-Allow-Headers"] = "Content-Type, X-CSRFToken"
+        response["Access-Control-Allow-Credentials"] = "true"
     return response

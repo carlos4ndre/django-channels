@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import ReconnectingWebSocket from 'reconnecting-websocket';
-import { Input, List } from 'semantic-ui-react'
-import emoji from 'react-easy-emoji'
-import axios from 'axios';
+import React, { Component } from "react";
+import ReconnectingWebSocket from "reconnecting-websocket";
+import { Input, List } from "semantic-ui-react"
+import emoji from "react-easy-emoji"
+import axios from "axios";
 
 
 export default class App extends Component {
@@ -15,33 +15,33 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-      axios.get('http://localhost:8000/messages')
+      axios.get("http://localhost:8000/messages")
       .then(response => {
         this.setState({
           messages: response.data.messages,
         })
       })
       .catch((error) => {
-        console.info('error', error)
+        console.info("error", error)
       })
 
-      this.socket = new ReconnectingWebSocket('ws://localhost:8000/chat')
-      this.socket.addEventListener('open', () => this.onSocketOpen())
-      this.socket.addEventListener('close', () => this.onSocketClose())
-      this.socket.addEventListener('message', (event) => this.onSocketMessage(event))
-      this.socket.addEventListener('error', (event) => this.onSocketError(event))
+      this.socket = new ReconnectingWebSocket("ws://localhost:8000/chat")
+      this.socket.addEventListener("open", () => this.onSocketOpen())
+      this.socket.addEventListener("close", () => this.onSocketClose())
+      this.socket.addEventListener("message", (event) => this.onSocketMessage(event))
+      this.socket.addEventListener("error", (event) => this.onSocketError(event))
   }
 
   onSocketClose() {
-    console.log('Connection terminated')
+    console.log("Connection terminated")
   }
 
   onSocketOpen() {
-    console.log('Connection established')
+    console.log("Connection established")
   }
 
   onSocketMessage(message) {
-    console.debug('Received message:',  message)
+    console.debug("Received message:",  message)
     let new_message = JSON.parse(message.data)
     this.setState({
       messages: [...this.state.messages, new_message]
@@ -53,7 +53,7 @@ export default class App extends Component {
   }
 
   sendMessage(text) {
-    console.debug('Sending text:', text)
+    console.debug("Sending text:", text)
     this.socket.send(text)
   }
 
@@ -64,7 +64,7 @@ export default class App extends Component {
       this.sendMessage(text)
 
       /// reset input box
-      event.target.value = ''
+      event.target.value = ""
     }
   }
 
@@ -75,7 +75,7 @@ export default class App extends Component {
               <List.Item key={i}>[{message.timestamp}] {message.text}</List.Item>)
     }
     else {
-      messages = <List.Item><h3>{emoji('No messages yet... 😀')}</h3></List.Item>
+      messages = <List.Item><h3>{emoji("No messages yet... 😀")}</h3></List.Item>
     }
 
 
@@ -89,8 +89,8 @@ export default class App extends Component {
         <div className="message-sender">
           <Input
             fluid
-            size='large'
-            placeholder='Type some stuff...'
+            size="large"
+            placeholder="Type some stuff..."
             onKeyPress={this.handleKeyPress.bind(this)}
           />
         </div>

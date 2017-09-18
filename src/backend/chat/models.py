@@ -10,14 +10,14 @@ class Message(models.Model):
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
 
     def __unicode__(self):
-        return '[{timestamp}]: {text}'.format(**self.as_dict())
+        return "[{timestamp}]: {text}".format(**self.as_dict())
 
     @property
     def formatted_timestamp(self):
-        return self.timestamp.strftime('%b %-d %-I:%M %p')
+        return self.timestamp.strftime("%b %-d %-I:%M %p")
 
     def as_dict(self):
-        return {'text': self.text, 'timestamp': self.formatted_timestamp}
+        return {"text": self.text, "timestamp": self.formatted_timestamp}
 
     def to_json(self):
         return json.dumps(self.as_dict())

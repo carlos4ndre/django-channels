@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 
 def http_index(message):
     response = HttpResponse("HTTP index endpoint")
-
     for chunk in AsgiHandler.encode_response(response):
         message.reply_channel.send(chunk)
 
@@ -47,7 +46,7 @@ def ws_receive(message):
     chat_message = Message.objects.create(text=text)
 
     logger.debug("WS broadcast chat message: {}".format(chat_message))
-    Group('chat').send({
+    Group("chat").send({
         "text": chat_message.to_json()
     })
 
@@ -57,6 +56,6 @@ def ws_disconnect(message):
 
 def _parse_limit(params):
     try:
-        return int(params.get('limit')[0])
+        return int(params.get("limit")[0])
     except:
         return MAX_MESSAGES_LIMIT
