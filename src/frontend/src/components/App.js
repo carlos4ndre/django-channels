@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Input } from "semantic-ui-react"
-import axios from "axios";
 import ReconnectingWebSocket from "reconnecting-websocket";
 import MessageList from "./MessageList"
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import axios from "axios";
+import axiosRetry from 'axios-retry';
 
 
 export default class App extends Component {
@@ -12,25 +13,16 @@ export default class App extends Component {
     super();
     this.state = {
       messages: [],
+      loading: true,
     };
   }
 
   componentDidMount() {
-      axios.get("http://localhost:8000/messages")
-      .then(response => {
-        this.setState({
-          messages: response.data.messages,
-        })
-      })
-      .catch((error) => {
-        console.info("error", error)
-      })
-
-      this.socket = new ReconnectingWebSocket("ws://localhost:8000/chat")
-      this.socket.addEventListener("open", () => this.onSocketOpen())
-      this.socket.addEventListener("close", () => this.onSocketClose())
-      this.socket.addEventListener("message", (event) => this.onSocketMessage(event))
-      this.socket.addEventListener("error", (event) => this.onSocketError(event))
+    this.socket = new ReconnectingWebSocket("ws://localhost:8000/chat")
+    this.socket.addEventListener("open", () => this.onSocketOpen())
+    this.socket.addEventListener("close", () => this.onSocketClose())
+    this.socket.addEventListener("message", (event) => this.onSocketMessage(event))
+    this.socket.addEventListener("error", (event) => this.onSocketError(event))
   }
 
   onSocketClose() {
@@ -41,6 +33,7 @@ export default class App extends Component {
   onSocketOpen() {
     console.log("Connection established")
     this.createNotification("success", "Connection Established")
+    this.fetchLatestMessages()
   }
 
   onSocketMessage(message) {
@@ -56,6 +49,25 @@ export default class App extends Component {
   onSocketError(error) {
     console.log(error)
     this.createNotification("error", "Something is broken!")
+  }
+
+  fetchLatestMessages() {
+    axiosRetry(axios, { retries: 3 });
+    axios.get("http://localhost:8000/messages")
+    .then(response => {
+      this.setState({
+        messages: response.data.messages,
+        loading: false,
+      })
+    })
+    .catch((error) => {
+      console.info("error", error)
+      this.setState({
+        messages: [],
+        loading: false,
+      })
+      this.createNotification("error", "Failed to get messages!")
+    })
   }
 
   sendMessage(text) {
@@ -93,13 +105,14 @@ export default class App extends Component {
         default:
           return
       }
-  };
+  }
 
   render() {
     return (
       <div id="message-box">
         <div id="message-board">
-          <MessageList messages={this.state.messages}/>
+          <MessageList messages={this.state.messages}
+                       loading={this.state.loading}/>
         </div>
         <NotificationContainer />
         <div id="message-sender">

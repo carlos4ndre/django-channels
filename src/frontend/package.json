@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "axios": "^0.16.2",
+    "axios-retry": "^3.0.1",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-easy-emoji": "^1.1.0",
