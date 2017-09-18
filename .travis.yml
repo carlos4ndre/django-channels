@@ -10,12 +10,13 @@ env:
   global:
     - PIP_USE_MIRRORS=true
 
-install:
+before_install:
   - cd src/backend
+
+install:
   - pip install -q -r requirements.txt
 
 before_script:
-  - cd src/backend
   - python manage.py makemigrations
   - python manage.py migrate
 
