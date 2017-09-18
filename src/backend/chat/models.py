@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+import json
 from django.db import models
 from django.utils import timezone
 
@@ -17,3 +18,6 @@ class Message(models.Model):
 
     def as_dict(self):
         return {'text': self.text, 'timestamp': self.formatted_timestamp}
+
+    def to_json(self):
+        return json.dumps(self.as_dict())

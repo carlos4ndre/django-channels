@@ -37,13 +37,23 @@ def http_messages(message):
         message.reply_channel.send(chunk)
 
 def ws_connect(message):
-    pass
+    logger.debug("WS connect: {}".format(message.__dict__))
+    message.reply_channel.send({"accept": True})
+    Group("chat").add(message.reply_channel)
 
 def ws_receive(message):
-    pass
+    logger.debug("WS receive: {}".format(message.__dict__))
+    text = message.content["text"]
+    chat_message = Message.objects.create(text=text)
+
+    logger.debug("WS broadcast chat message: {}".format(chat_message))
+    Group('chat').send({
+        "text": chat_message.to_json()
+    })
 
 def ws_disconnect(message):
-    pass
+    logger.debug("WS disconnect: {}".format(message.__dict__))
+    Group("chat").discard(message.reply_channel)
 
 def _parse_limit(params):
     try:
