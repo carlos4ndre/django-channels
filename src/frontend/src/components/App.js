@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import ReconnectingWebSocket from "reconnecting-websocket";
-import { Input, List } from "semantic-ui-react"
-import emoji from "react-easy-emoji"
+import { Input } from "semantic-ui-react"
 import axios from "axios";
+import MessageList from "./MessageList"
 
 
 export default class App extends Component {
@@ -69,22 +69,10 @@ export default class App extends Component {
   }
 
   render() {
-    let messages;
-    if (this.state.messages.length > 0) {
-      messages = this.state.messages.map((message, i) =>
-              <List.Item key={i}>[{message.timestamp}] {message.text}</List.Item>)
-    }
-    else {
-      messages = <List.Item><h3>{emoji("No messages yet... 😀")}</h3></List.Item>
-    }
-
-
     return (
       <div className="message-box">
         <div className="message-board">
-          <List>
-            { messages }
-          </List>
+          <MessageList messages={this.state.messages}/>
         </div>
         <div className="message-sender">
           <Input
