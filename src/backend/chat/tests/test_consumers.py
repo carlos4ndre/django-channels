@@ -53,6 +53,7 @@ def test_http_messages_with_limit():
     # check response
     assert len(messages) == HTTP_PARAMS_LIMIT
 
+
 @pytest.mark.django_db
 def test_ws_connect():
     # connect to chat group
@@ -60,7 +61,8 @@ def test_ws_connect():
     client.send_and_consume("websocket.connect", path="/chat")
 
     # check there is no errors
-    assert client.receive(json=False) == None
+    assert client.receive(json=False) is None
+
 
 @pytest.mark.django_db
 def test_ws_disconnect():
@@ -70,7 +72,8 @@ def test_ws_disconnect():
     client.send_and_consume("websocket.disconnect", path="/chat")
 
     # check there is no errors
-    assert client.receive(json=False) == None
+    assert client.receive(json=False) is None
+
 
 @pytest.mark.django_db
 def test_ws_receive():

@@ -1,0 +1,12 @@
+[flake8]
+ignore = D203
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    build,
+    dist,
+    manage.py,
+    *migrations*
+max-complexity=10
+max-line-length = 100

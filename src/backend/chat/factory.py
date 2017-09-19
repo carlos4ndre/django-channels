@@ -4,6 +4,7 @@ from chat.models import Message
 
 starting_seq_num = 1
 
+
 class MessageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Message

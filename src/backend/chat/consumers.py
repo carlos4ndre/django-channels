@@ -1,6 +1,5 @@
 import logging
 from django.http import HttpResponse, JsonResponse
-from django.core import serializers
 from channels import Group
 from channels.handler import AsgiHandler
 from urllib.parse import parse_qs
@@ -15,6 +14,7 @@ def http_index(channel_message):
     response = HttpResponse("HTTP index endpoint")
     for chunk in AsgiHandler.encode_response(response):
         channel_message.reply_channel.send(chunk)
+
 
 def http_messages(channel_message):
     # parse params
@@ -35,10 +35,12 @@ def http_messages(channel_message):
     for chunk in AsgiHandler.encode_response(response):
         channel_message.reply_channel.send(chunk)
 
+
 def ws_connect(channel_message):
     logger.debug("WS connect: {}".format(channel_message.__dict__))
     channel_message.reply_channel.send({"accept": True})
     Group("chat").add(channel_message.reply_channel)
+
 
 def ws_receive(channel_message):
     logger.debug("WS receive: {}".format(channel_message.__dict__))
@@ -50,9 +52,11 @@ def ws_receive(channel_message):
         "text": message.to_json()
     })
 
+
 def ws_disconnect(channel_message):
     logger.debug("WS disconnect: {}".format(channel_message.__dict__))
     Group("chat").discard(channel_message.reply_channel)
+
 
 def _parse_limit(params):
     try:
