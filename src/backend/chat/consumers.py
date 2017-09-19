@@ -11,14 +11,14 @@ from chat.middleware import _add_cors_to_response
 logger = logging.getLogger(__name__)
 
 
-def http_index(message):
+def http_index(channel_message):
     response = HttpResponse("HTTP index endpoint")
     for chunk in AsgiHandler.encode_response(response):
-        message.reply_channel.send(chunk)
+        channel_message.reply_channel.send(chunk)
 
-def http_messages(message):
+def http_messages(channel_message):
     # parse params
-    params = parse_qs(message.content["query_string"])
+    params = parse_qs(channel_message.content["query_string"])
     logger.debug("params: {}".format(params))
 
     # fetch messages
@@ -33,26 +33,26 @@ def http_messages(message):
     response = _add_cors_to_response(response)
 
     for chunk in AsgiHandler.encode_response(response):
-        message.reply_channel.send(chunk)
+        channel_message.reply_channel.send(chunk)
 
-def ws_connect(message):
-    logger.debug("WS connect: {}".format(message.__dict__))
-    message.reply_channel.send({"accept": True})
-    Group("chat").add(message.reply_channel)
+def ws_connect(channel_message):
+    logger.debug("WS connect: {}".format(channel_message.__dict__))
+    channel_message.reply_channel.send({"accept": True})
+    Group("chat").add(channel_message.reply_channel)
 
-def ws_receive(message):
-    logger.debug("WS receive: {}".format(message.__dict__))
-    text = message.content["text"]
-    chat_message = Message.objects.create(text=text)
+def ws_receive(channel_message):
+    logger.debug("WS receive: {}".format(channel_message.__dict__))
+    text = channel_message.content["text"]
+    message = Message.objects.create(text=text)
 
-    logger.debug("WS broadcast chat message: {}".format(chat_message))
+    logger.debug("WS broadcast chat message: {}".format(message))
     Group("chat").send({
-        "text": chat_message.to_json()
+        "text": message.to_json()
     })
 
-def ws_disconnect(message):
-    logger.debug("WS disconnect: {}".format(message.__dict__))
-    Group("chat").discard(message.reply_channel)
+def ws_disconnect(channel_message):
+    logger.debug("WS disconnect: {}".format(channel_message.__dict__))
+    Group("chat").discard(channel_message.reply_channel)
 
 def _parse_limit(params):
     try:
