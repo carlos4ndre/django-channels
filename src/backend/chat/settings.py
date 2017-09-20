@@ -90,7 +90,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
-REACT_APP_DIR = os.path.join(BASE_DIR, "static")
+REACT_APP_DIR = os.path.join(BASE_DIR, "frontend")
+
+STATICFILES_DIRS = [
+    os.path.join(REACT_APP_DIR, "static"),
+]
 
 # Channels
 REDIS_HOST = os.environ.get('REDIS_HOST') or "localhost"
