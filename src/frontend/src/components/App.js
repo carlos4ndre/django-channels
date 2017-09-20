@@ -80,7 +80,9 @@ export default class App extends Component {
     if (event.key === "Enter") {
       // send message to everyone
       let text = event.target.value
-      this.sendMessage(text)
+      if (text && text.trim() !== "") {
+        this.sendMessage(text)
+      }
 
       /// reset input box
       event.target.value = ""
