@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from 'prop-types';
 import { List } from "semantic-ui-react"
 import NoMessages from "./NoMessages"
 import LoadingIcon from "./LoadingIcon.js"
@@ -41,4 +42,9 @@ export default class MessageList extends Component {
       </div>
     )
   }
+}
+
+MessageList.propTypes = {
+  className: PropTypes.string,
+  messages: PropTypes.array.isRequired,
 }
