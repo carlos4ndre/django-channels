@@ -46,5 +46,5 @@ export default class MessageList extends Component {
 
 MessageList.propTypes = {
   className: PropTypes.string,
-  messages: PropTypes.array.isRequired,
+  messages: PropTypes.array.isRequired
 }

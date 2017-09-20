@@ -7,7 +7,7 @@ const Message = (props) => {
 
 Message.propTypes = {
   text: PropTypes.string.isRequired,
-  timestamp: PropTypes.string.isRequired,
+  timestamp: PropTypes.string.isRequired
 }
 
 export default Message;
