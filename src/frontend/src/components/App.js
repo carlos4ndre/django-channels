@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { Input } from "semantic-ui-react"
 import ReconnectingWebSocket from "reconnecting-websocket";
 import MessageList from "./MessageList"
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import {NotificationContainer, NotificationManager} from "react-notifications";
 import axios from "axios";
-import axiosRetry from 'axios-retry';
+import axiosRetry from "axios-retry";
+import Settings from "../settings"
 
 
 export default class App extends Component {
@@ -18,7 +19,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    this.socket = new ReconnectingWebSocket("ws://localhost:8000/chat")
+    this.socket = new ReconnectingWebSocket(Settings.WS_CHAT_URL)
     this.socket.addEventListener("open", () => this.onSocketOpen())
     this.socket.addEventListener("close", () => this.onSocketClose())
     this.socket.addEventListener("message", (event) => this.onSocketMessage(event))
@@ -52,8 +53,8 @@ export default class App extends Component {
   }
 
   fetchLatestMessages() {
-    axiosRetry(axios, { retries: 3 });
-    axios.get("http://localhost:8000/messages")
+    axiosRetry(axios, { retries: Settings.HTTP_MAX_RETRIES });
+    axios.get(Settings.HTTP_MESSAGES_URL)
     .then(response => {
       this.setState({
         messages: response.data.messages,
@@ -89,16 +90,16 @@ export default class App extends Component {
   createNotification = (type, message) => {
       switch (type) {
         case 'info':
-          NotificationManager.info(message, 'Info');
+          NotificationManager.info(message, 'Info', Settings.NOTIFICATIONS_DELAY);
           break;
         case 'success':
-          NotificationManager.success(message, 'Success');
+          NotificationManager.success(message, 'Success', Settings.NOTIFICATIONS_DELAY);
           break;
         case 'warning':
-          NotificationManager.warning(message, 'Warning', 3000);
+          NotificationManager.warning(message, 'Warning', Settings.NOTIFICATIONS_DELAY);
           break;
         case 'error':
-          NotificationManager.error(message, 'Error', 5000, () => {
+          NotificationManager.error(message, 'Error', Settings.NOTIFICATIONS_DELAY, () => {
             alert('callback');
           });
           break;
