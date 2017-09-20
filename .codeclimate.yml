@@ -12,6 +12,8 @@ engines:
       - php
   eslint:
     enabled: true
+    config:
+      config: ./src/frontend/.eslintrc.yml
   fixme:
     enabled: true
 ratings:

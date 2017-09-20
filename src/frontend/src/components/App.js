@@ -14,7 +14,7 @@ export default class App extends Component {
     super();
     this.state = {
       messages: [],
-      loading: true,
+      loading: true
     };
   }
 
@@ -58,14 +58,14 @@ export default class App extends Component {
     .then(response => {
       this.setState({
         messages: response.data.messages,
-        loading: false,
+        loading: false
       })
     })
     .catch((error) => {
       console.info("error", error)
       this.setState({
         messages: [],
-        loading: false,
+        loading: false
       })
       this.createNotification("error", "Failed to get messages!")
     })
@@ -99,9 +99,7 @@ export default class App extends Component {
           NotificationManager.warning(message, 'Warning', Settings.NOTIFICATIONS_DELAY);
           break;
         case 'error':
-          NotificationManager.error(message, 'Error', Settings.NOTIFICATIONS_DELAY, () => {
-            alert('callback');
-          });
+          NotificationManager.error(message, 'Error', Settings.NOTIFICATIONS_DELAY);
           break;
         default:
           return
@@ -125,4 +123,4 @@ export default class App extends Component {
       </div>
     );
   }
-};
+}
