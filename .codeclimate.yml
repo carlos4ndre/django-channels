@@ -13,7 +13,7 @@ engines:
   eslint:
     enabled: true
     config:
-      config: ./src/frontend/.eslintrc.yml
+      config: src/frontend/.eslintrc.yml
   fixme:
     enabled: true
 ratings:
