@@ -1,9 +1,8 @@
 from channels.routing import route, include
-from chat.consumers import http_index, http_messages, ws_connect, ws_disconnect, ws_receive
+from chat.consumers import http_messages, ws_connect, ws_disconnect, ws_receive
 
 
 http_routing = [
-    route("http.request", http_index, path=r"^/$", method=r"^GET$"),
     route("http.request", http_messages, path=r"^/messages$", method=r"^GET$"),
 ]
 

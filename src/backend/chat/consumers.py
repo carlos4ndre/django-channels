@@ -10,12 +10,6 @@ from chat.middleware import _add_cors_to_response
 logger = logging.getLogger(__name__)
 
 
-def http_index(channel_message):
-    response = HttpResponse("HTTP index endpoint")
-    for chunk in AsgiHandler.encode_response(response):
-        channel_message.reply_channel.send(chunk)
-
-
 def http_messages(channel_message):
     # parse params
     params = parse_qs(channel_message.content["query_string"])
