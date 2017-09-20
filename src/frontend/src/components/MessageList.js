@@ -6,9 +6,17 @@ import Message from "./Message"
 
 export default class MessageList extends Component {
 
-  componentDidUpdate() {
-    // TODO: fix auto scroll to bottom
+  componentDidMount() {
+    this.scrollToBottom();
   }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight
+  };
 
   render() {
     let messages;
@@ -27,6 +35,10 @@ export default class MessageList extends Component {
       messages = <NoMessages />
     }
 
-    return <List>{messages}</List>
+    return (
+      <div className={this.props.className} ref={(el) => { this.messagesContainer = el; }}>
+        <List>{messages}</List>
+      </div>
+    )
   }
 }

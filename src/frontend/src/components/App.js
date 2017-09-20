@@ -110,19 +110,17 @@ export default class App extends Component {
   render() {
     return (
       <div id="message-box">
-        <div id="message-board">
-          <MessageList messages={this.state.messages}
-                       loading={this.state.loading}/>
-        </div>
+        <MessageList className="message-board"
+                     messages={this.state.messages}
+                     loading={this.state.loading}/>
+        <Input
+          className="message-sender"
+          fluid
+          size="large"
+          placeholder="Type some stuff..."
+          onKeyPress={this.handleKeyPress.bind(this)}
+        />
         <NotificationContainer />
-        <div id="message-sender">
-          <Input
-            fluid
-            size="large"
-            placeholder="Type some stuff..."
-            onKeyPress={this.handleKeyPress.bind(this)}
-          />
-        </div>
       </div>
     );
   }

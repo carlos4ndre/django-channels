@@ -14,13 +14,13 @@ body > div {
   border: medium groove #e6f2ff;
 }
 
-#message-board {
+.message-board {
   margin: 50px 50px;
   height: 70%;
   overflow:hidden;
   overflow-y:scroll;
 }
 
-#message-sender {
+.message-sender {
   margin: 50px 50px;
 }
