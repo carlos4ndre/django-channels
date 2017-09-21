@@ -4,7 +4,7 @@ from channels import Group
 from channels.handler import AsgiHandler
 from urllib.parse import parse_qs
 from chat.models import Message
-from chat.contants import MAX_MESSAGES_LIMIT
+from chat.constants import MAX_MESSAGES_LIMIT
 from chat.middleware import _add_cors_to_response
 
 logger = logging.getLogger(__name__)
