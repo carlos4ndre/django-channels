@@ -4,11 +4,17 @@ python:
   - "3.6"
 
 services:
+  - postgresql
   - redis-server
 
 env:
   global:
     - PIP_USE_MIRRORS=true
+    - REDIS_HOST=localhost
+    - POSTGRES_HOST=localhost
+    - POSTGRES_DB=chat
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=""
 
 before_install:
   - cd src/backend
@@ -17,6 +23,7 @@ install:
   - pip install -q -r requirements.txt
 
 before_script:
+  - psql -c 'create database chat;' -U postgres
   - python manage.py makemigrations
   - python manage.py migrate
 

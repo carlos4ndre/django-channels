@@ -1,5 +1,5 @@
 import logging
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from channels import Group
 from channels.handler import AsgiHandler
 from urllib.parse import parse_qs
@@ -41,7 +41,7 @@ def ws_receive(channel_message):
     text = channel_message.content["text"]
     message = Message.objects.create(text=text)
 
-    logger.debug("WS broadcast chat message: {}".format(message))
+    logger.debug("WS broadcast chat message: {}".format(message.to_json()))
     Group("chat").send({
         "text": message.to_json()
     })

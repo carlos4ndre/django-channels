@@ -1,7 +1,7 @@
 FROM alpine:3.6
 
 # Install base dependencies
-RUN apk add --update build-base
+RUN apk add --update build-base postgresql-dev
 
 # Install python 3
 RUN apk add --no-cache python3 python3-dev && \
@@ -26,5 +26,5 @@ RUN pip install -r requirements.txt
 # Build react app
 ADD src/frontend /tmp/frontend
 RUN cd /tmp/frontend && npm install && yarn run build
-RUN mv /tmp/frontend/build /app/frontend
-RUN rm -fr /tmp/frontend
+RUN mkdir /app/frontend
+RUN cp -fr /tmp/frontend/build /app/frontend

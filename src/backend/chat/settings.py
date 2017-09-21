@@ -53,15 +53,22 @@ TEMPLATES = [
 ]
 
 ROOT_URLCONF = "chat.urls"
-
 WSGI_APPLICATION = "chat.wsgi.application"
 
-
 # Database
+POSTGRES_DB = os.environ.get("POSTGRES_DB")
+POSTGRES_USER = os.environ.get("POSTGRES_USER")
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': POSTGRES_DB,
+        'USER': POSTGRES_USER,
+        'PASSWORD': POSTGRES_PASSWORD,
+        'HOST': POSTGRES_HOST,
+        'PORT': 5432,
     }
 }
 
@@ -93,11 +100,11 @@ STATIC_URL = "/static/"
 REACT_APP_DIR = os.path.join(BASE_DIR, "frontend")
 
 STATICFILES_DIRS = [
-    os.path.join(REACT_APP_DIR, "static"),
+    os.path.join(REACT_APP_DIR, "build", "static"),
 ]
 
 # Channels
-REDIS_HOST = os.environ.get('REDIS_HOST') or "localhost"
+REDIS_HOST = os.environ.get('REDIS_HOST')
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",

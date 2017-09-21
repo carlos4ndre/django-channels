@@ -2,6 +2,12 @@ version: '2'
 services:
     redis:
         image: redis
+    postgres:
+        image: postgres
+        environment:
+          - POSTGRES_DB=chat
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
     app:
         build: .
         command: sh -c "./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
@@ -9,5 +15,9 @@ services:
           - "8000:8000"
         environment:
           - REDIS_HOST=redis
+          - POSTGRES_HOST=postgres
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
         depends_on:
           - redis
+          - postgres
