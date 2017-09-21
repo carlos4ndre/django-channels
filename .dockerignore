@@ -1,0 +1,10 @@
+.DS_Store
+.dockerignore
+.git/
+.gitignore
+README.rst
+*.pyc
+__pycache__/
+venv/
+.cache/
+build/

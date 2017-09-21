@@ -1,19 +1,13 @@
 import logging
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from channels import Group
 from channels.handler import AsgiHandler
 from urllib.parse import parse_qs
 from chat.models import Message
-from chat.contants import MAX_MESSAGES_LIMIT
+from chat.constants import MAX_MESSAGES_LIMIT
 from chat.middleware import _add_cors_to_response
 
 logger = logging.getLogger(__name__)
-
-
-def http_index(channel_message):
-    response = HttpResponse("HTTP index endpoint")
-    for chunk in AsgiHandler.encode_response(response):
-        channel_message.reply_channel.send(chunk)
 
 
 def http_messages(channel_message):
@@ -47,7 +41,7 @@ def ws_receive(channel_message):
     text = channel_message.content["text"]
     message = Message.objects.create(text=text)
 
-    logger.debug("WS broadcast chat message: {}".format(message))
+    logger.debug("WS broadcast chat message: {}".format(message.to_json()))
     Group("chat").send({
         "text": message.to_json()
     })

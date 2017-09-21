@@ -2,24 +2,22 @@ version: '2'
 services:
     redis:
         image: redis
-    backend:
-        build: ./src/backend
-        command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-        volumes:
-            - ./src/backend:/code
+    postgres:
+        image: postgres
+        environment:
+          - POSTGRES_DB=chat
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
+    app:
+        build: .
+        command: sh -c "./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
         ports:
-            - "8000:8000"
+          - "8000:8000"
         environment:
           - REDIS_HOST=redis
+          - POSTGRES_HOST=postgres
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
         depends_on:
-            - redis
-    frontend:
-        build: ./src/frontend
-        command: yarn start
-        volumes:
-            - ./src/frontend:/code
-            - /frontend/node_modules
-        ports:
-            - "3000:3000"
-        depends_on:
-          - backend
+          - redis
+          - postgres
