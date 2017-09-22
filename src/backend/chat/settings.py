@@ -1,14 +1,10 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+# Base config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "p=z383^614+($#w6_!43st(^zc4#tcx0%+#p&c%$ka0e4_j4g&"
-
-# SECURITY WARNING: don"t run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
+DEBUG = os.environ.get('DEBUG') or False
 
 # Application definition
 INSTALLED_APPS = [

@@ -11,8 +11,11 @@ A simple web chat built with Django Channels + ReactJS
 
 With docker you just need to run this command:
 ```
-$ docker-compose up --build
+$ docker-compose -f docker-compose-{production|development}.yml up
 ```
+
+*Note:* with this new environment, you will get an additional
+endpoint for the frontend, it will be running on port 3000.
 
 ## How does it work?
 
@@ -24,4 +27,9 @@ via websockets, using both http and ws channels on django side.
 feature, great for real-time apps using websockets.
 
 The react app is served by django, so you will need
-to access the it on http://localhost:8000
+to access the it on `http://localhost:8000`.
+
+In case you're using the development environment, then
+you can also access `http://localhost:3000` to develop
+the frontend part, which is very handy as it provides
+hot reload and on the fly linting messages!

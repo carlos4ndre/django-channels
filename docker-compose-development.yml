@@ -1,0 +1,35 @@
+version: "3"
+services:
+    redis:
+        image: redis
+    postgres:
+        image: postgres
+        environment:
+          - POSTGRES_DB=chat
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
+    app:
+        build: .
+        command: sh -c "sleep 10 && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
+        ports:
+          - "8000:8000"
+        volumes:
+          - ./src/backend:/app
+        environment:
+          - DEBUG=True
+          - REDIS_HOST=redis
+          - POSTGRES_HOST=postgres
+          - POSTGRES_USER=admin
+          - POSTGRES_PASSWORD=ninjas
+        depends_on:
+          - redis
+          - postgres
+    frontend:
+        build: src/frontend
+        command: yarn start
+        ports:
+          - "3000:3000"
+        volumes:
+          - ./src/frontend:/app
+        depends_on:
+          - app
