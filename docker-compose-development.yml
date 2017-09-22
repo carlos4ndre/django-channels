@@ -16,7 +16,8 @@ services:
         volumes:
           - ./src/backend:/app
         environment:
-          - DEBUG=True
+          - DJANGO_DEBUG=True
+          - DJANGO_LOG_LEVEL=DEBUG
           - REDIS_HOST=redis
           - POSTGRES_HOST=postgres
           - POSTGRES_USER=admin

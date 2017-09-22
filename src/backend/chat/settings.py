@@ -4,7 +4,9 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "p=z383^614+($#w6_!43st(^zc4#tcx0%+#p&c%$ka0e4_j4g&"
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
-DEBUG = os.environ.get('DEBUG') or False
+
+# TODO: this is insecure, static files should be served by a reverse proxy
+DEBUG = True
 
 # Application definition
 INSTALLED_APPS = [
@@ -100,7 +102,7 @@ STATICFILES_DIRS = [
 ]
 
 # Channels
-REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_HOST = os.environ.get("REDIS_HOST")
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
@@ -129,7 +131,7 @@ LOGGING = {
         "chat": {
             "handlers": ["console"],
             "propagate": False,
-            "level": "DEBUG",
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
         },
     },
 }
