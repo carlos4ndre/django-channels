@@ -5,7 +5,7 @@ from chat.factory import MessageFactory
 
 
 @pytest.mark.django_db
-def test_http_messages():
+def test_http_get_messages():
     # populate db with messages
     MESSAGE_START_SEQUENCE = 1
     MESSAGE_BATCH_SIZE = 5
@@ -55,6 +55,36 @@ def test_http_messages_with_limit():
 
 
 @pytest.mark.django_db
+def test_http_post_messages():
+    # prepare test data
+    text = "hello there!"
+    ws_client = WSClient()
+    http_client = HttpClient()
+
+    # subscribe to chat channel
+    ws_client.send_and_consume("websocket.connect", path="/chat")
+    assert ws_client.receive(json=False) is None
+
+    # post message
+    http_client = HttpClient()
+    http_client.send_and_consume("http.request", content={
+        "path": "/messages",
+        "method": "POST",
+        "body": json.dumps({"text": text})
+    })
+    response = http_client.receive()
+    response_code = response["status"]
+    response_content = json.loads(response["content"])
+    assert response_code == 200
+    assert response_content == {}
+
+    # check message is broadcast to chat channel
+    response = ws_client.receive()
+    response_text = response["text"]
+    assert response_text == text
+
+
+@pytest.mark.django_db
 def test_ws_connect():
     # connect to chat group
     client = WSClient()
@@ -73,16 +103,3 @@ def test_ws_disconnect():
 
     # check there is no errors
     assert client.receive(json=False) is None
-
-
-@pytest.mark.django_db
-def test_ws_receive():
-    # send message
-    text = "this is a text"
-    client = WSClient()
-    client.send_and_consume("websocket.connect", path="/chat")
-    client.send_and_consume("websocket.receive", path="/chat", text=text)
-
-    # consume message and check content
-    response = client.receive(json=True)
-    assert response["text"] == text

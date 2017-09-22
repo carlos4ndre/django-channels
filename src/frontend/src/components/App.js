@@ -73,7 +73,16 @@ export default class App extends Component {
 
   sendMessage(text) {
     console.debug("Sending text:", text)
-    this.socket.send(text)
+    const data = {"text": text}
+
+    axiosRetry(axios, { retries: Settings.HTTP_MAX_RETRIES });
+    axios.post(Settings.HTTP_MESSAGES_URL, data)
+    .then(response => {
+      console.debug("Message sent!")
+    })
+    .catch((error) => {
+      this.createNotification("error", "Failed to send message!")
+    })
   }
 
   handleKeyPress(event) {
