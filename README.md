@@ -11,7 +11,7 @@ A simple web chat built with Django Channels + ReactJS
 
 With docker you just need to run this command:
 ```
-$ docker-compose -f docker-compose-{production|development}.yml up
+$ docker-compose -f docker-compose-{production|development}.yml up --build
 ```
 
 *Note:* with this new environment, you will get an additional
