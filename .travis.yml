@@ -17,7 +17,7 @@ env:
     - POSTGRES_PASSWORD=""
 
 before_install:
-  - cd src/backend
+  - cd app/backend
 
 install:
   - pip install -q -r requirements.txt
