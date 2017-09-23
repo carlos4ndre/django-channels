@@ -23,8 +23,8 @@ via websockets, using both http and ws channels on django side.
 - backend: django app running on port 8000, that uses channels
 feature, great for real-time apps using websockets.
 
-The react app is served by django, so you will need
-to access the it on `http://localhost`.
+Nginx was used as reverse proxy, and it's the entrypoint for
+the app, available at `http://localhost`.
 
 In case you're using the development environment, then
 you can also access `http://localhost:3000` to develop
