@@ -4,9 +4,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "p=z383^614+($#w6_!43st(^zc4#tcx0%+#p&c%$ka0e4_j4g&"
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "[::1]"]
-
-# TODO: this is insecure, static files should be served by a reverse proxy
-DEBUG = True
+DEBUG = os.getenv("DJANGO_DEBUG", False)
 
 # Application definition
 INSTALLED_APPS = [

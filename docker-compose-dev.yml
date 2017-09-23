@@ -1,20 +1,23 @@
 version: "3"
 services:
     redis:
+        restart: always
         image: redis
     postgres:
+        restart: always
         image: postgres
         environment:
           - POSTGRES_DB=chat
           - POSTGRES_USER=admin
           - POSTGRES_PASSWORD=ninjas
     app:
-        build: .
+        restart: always
+        build: ./app
         command: sh -c "sleep 10 && ./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
         ports:
           - "8000:8000"
         volumes:
-          - ./src/backend:/app
+          - www-data:/app/frontend
         environment:
           - DJANGO_DEBUG=True
           - DJANGO_LOG_LEVEL=DEBUG
@@ -26,11 +29,23 @@ services:
           - redis
           - postgres
     frontend:
-        build: src/frontend
+        build: ./app/frontend
         command: yarn start
         ports:
           - "3000:3000"
         volumes:
-          - ./src/frontend:/app
+          - ./app/frontend:/app
+          - /app/node_modules
         depends_on:
           - app
+    nginx:
+        restart: always
+        build: ./nginx
+        ports:
+          - "80:80"
+        volumes:
+          - www-data:/var/www
+        depends_on:
+          - app
+volumes:
+  www-data:
