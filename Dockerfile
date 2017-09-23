@@ -26,5 +26,14 @@ RUN pip install -r requirements.txt
 # Build react app
 ADD src/frontend /tmp/frontend
 RUN cd /tmp/frontend && npm install && yarn run build
+
+# Copy files over to django project
 RUN mkdir /app/frontend
-RUN cp -fr /tmp/frontend/build /app/frontend
+RUN mkdir /app/frontend/static
+RUN cp /tmp/frontend/build/index.html /app/frontend
+RUN cp -fr /tmp/frontend/build/static/* /app/frontend/static
+RUN cp /tmp/frontend/build/manifest.json /app/frontend/static
+RUN cp /tmp/frontend/build/favicon.ico /app/frontend/static
+
+# clean up trash
+RUN rm -fr /tmp/frontend
